@@ -181,6 +181,21 @@ namespace MyWorkCam
                         Directory.CreateDirectory(saveFolder);
                         isFirst = true;
                     }
+                    
+                    // if the image is larger than 1280 px, resize it to 1280 px.
+                    if (bmpScreenshot.Width > 1280)
+                    {
+                        var ratio = 1280.0 / bmpScreenshot.Width;
+                        var newHeight = (int)(bmpScreenshot.Height * ratio);
+                        var newWidth = (int)(bmpScreenshot.Width * ratio);
+                        var newBmp = new Bitmap(newWidth, newHeight);
+                        var newGfx = Graphics.FromImage(newBmp);
+                        newGfx.DrawImage(bmpScreenshot, 0, 0, newWidth, newHeight);
+                        bmpScreenshot.Dispose();
+                        bmpScreenshot = newBmp;
+                        gfxScreenshot.Dispose();
+                        gfxScreenshot = newGfx;
+                    }
                                         
                     // For user's convenience, we add "Today's first shot" to the image if it is the first screenshot.
                     if (isFirst)
